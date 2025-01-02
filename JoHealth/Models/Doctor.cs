@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using JoHealth.Models;
 
-namespace JoHealth.Models
+public class Doctor : User
 {
-    public class Doctor : IdentityUser
+    public List<Patient> Patients { get; set; } = new List<Patient>();
+
+    public void ViewPatientRecords(Patient patient)
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Specialty { get; set; }
-        public List<Patient> Patients { get; set; } 
-        public List<Appointment> Appointments { get; set; } 
+        // Logic to fetch and view patient's records
+        var records = patient.MedicalRecords;
     }
 }

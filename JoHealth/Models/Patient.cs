@@ -1,10 +1,24 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using JoHealth.Models;
 
-namespace JoHealth.Models
+public class Patient : User
 {
-    public class Patient : IdentityUser
+    public List<Appointment> Appointments { get; set; } = new List<Appointment>();
+    public List<Record> MedicalRecords { get; set; } = new List<Record>();
+    public Payment PaymentMethod { get; set; }
+
+    public Appointment BookAppointment(Appointment appointment)
     {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
+        Appointments.Add(appointment);
+        return appointment;
+    }
+
+    public void SubmitMedicalRecord(Record record)
+    {
+        MedicalRecords.Add(record);
+    }
+
+    public void UpdatePaymentMethod(Payment payment)
+    {
+        PaymentMethod = payment;
     }
 }

@@ -1,6 +1,9 @@
-﻿namespace JoHealth.Models
+﻿using JoHealth.Models;
+
+public class Pharmacist : User
 {
-    public class Pharmacist
+    public void ManageMedicines(List<Medicine> medicines)
     {
+        // Logic to manage medicines (e.g., inventory)
     }
 }
