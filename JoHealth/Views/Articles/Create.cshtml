@@ -1,0 +1,33 @@
+﻿@model JoHealth.Models.Article
+
+<div class="container mt-4">
+    <h2>Create Article</h2>
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Title" class="control-label"></label>
+            <input asp-for="Title" class="form-control" />
+            <span asp-validation-for="Title" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Body" class="control-label"></label>
+            <textarea asp-for="Body" class="form-control"></textarea>
+            <span asp-validation-for="Body" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label"></label>
+            <input asp-for="ImageUrl" class="form-control" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="PublishDate" class="control-label"></label>
+            <input asp-for="PublishDate" class="form-control" type="date" />
+            <span asp-validation-for="PublishDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Author" class="control-label"></label>
+            <input asp-for="Author" class="form-control" />
+            <span asp-validation-for="Author" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Submit</button>
+    </form>
+</div>

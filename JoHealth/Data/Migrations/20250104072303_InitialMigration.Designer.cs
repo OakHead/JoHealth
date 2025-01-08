@@ -4,6 +4,7 @@ using JoHealth.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,13 +12,15 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoHealth.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250104072303_InitialMigration")]
+    partial class InitialMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.11")
+                .HasAnnotation("ProductVersion", "8.0.10")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -427,30 +430,12 @@ namespace JoHealth.Data.Migrations
                 {
                     b.HasBaseType("JoHealth.Models.User");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("ImageUrl")
-                                .HasColumnName("Admin_ImageUrl");
-                        });
-
                     b.HasDiscriminator().HasValue("Admin");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Doctor", b =>
+            modelBuilder.Entity("Doctor", b =>
                 {
                     b.HasBaseType("JoHealth.Models.User");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("Doctor");
                 });
@@ -462,22 +447,12 @@ namespace JoHealth.Data.Migrations
                     b.Property<string>("DoctorId")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PaymentMethodId")
                         .HasColumnType("int");
 
                     b.HasIndex("DoctorId");
 
                     b.HasIndex("PaymentMethodId");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("ImageUrl")
-                                .HasColumnName("Patient_ImageUrl");
-                        });
 
                     b.HasDiscriminator().HasValue("Patient");
                 });
@@ -486,22 +461,12 @@ namespace JoHealth.Data.Migrations
                 {
                     b.HasBaseType("JoHealth.Models.User");
 
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("ImageUrl")
-                                .HasColumnName("Pharmacist_ImageUrl");
-                        });
-
                     b.HasDiscriminator().HasValue("Pharmacist");
                 });
 
             modelBuilder.Entity("JoHealth.Models.Appointment", b =>
                 {
-                    b.HasOne("JoHealth.Models.Doctor", "Doctor")
+                    b.HasOne("Doctor", "Doctor")
                         .WithMany()
                         .HasForeignKey("DoctorId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -585,7 +550,7 @@ namespace JoHealth.Data.Migrations
 
             modelBuilder.Entity("Patient", b =>
                 {
-                    b.HasOne("JoHealth.Models.Doctor", null)
+                    b.HasOne("Doctor", null)
                         .WithMany("Patients")
                         .HasForeignKey("DoctorId");
 
@@ -603,7 +568,7 @@ namespace JoHealth.Data.Migrations
                     b.Navigation("RecommendedMedications");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Doctor", b =>
+            modelBuilder.Entity("Doctor", b =>
                 {
                     b.Navigation("Patients");
                 });

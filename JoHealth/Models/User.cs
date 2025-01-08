@@ -5,11 +5,8 @@ namespace JoHealth.Models
 {
     public abstract class User : IdentityUser
     {
-        // Basic Info
         public string FirstName { get; set; }
         public string LastName { get; set; }
-
-        // Shared Functionalities
         public void EditProfile(string firstName, string lastName, string email)
         {
             FirstName = firstName;
@@ -19,12 +16,12 @@ namespace JoHealth.Models
 
         public List<Article> ViewArticles(List<Article> articles)
         {
-            return articles; // For simplicity, this could return all articles.
+            return articles; 
         }
 
         public List<Appointment> ViewAppointments(List<Appointment> appointments)
         {
-            return appointments; // Fetch appointments for the user.
+            return appointments;
         }
     }
 }

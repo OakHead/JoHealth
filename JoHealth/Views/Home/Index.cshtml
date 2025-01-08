@@ -1,9 +1,110 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
-
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="container mt-4">
+    <!-- Welcome Section -->
+    <div class="text-center">
+        <img src="https://via.placeholder.com/80" class="rounded-circle mb-3" alt="User Profile">
+        <h2>Welcome!</h2>
+        <p class="text-muted">Username</p>
+        <p>How is it going today?</p>
+    </div>
+
+    <!-- Health Articles Section -->
+    <div class="mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4>Health Articles</h4>
+            <a href="@Url.Action("Index", "Articles")" class="text-primary">See all</a>
+        </div>
+
+        <div class="row mt-3">
+            <!-- Article Card -->
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-3">
+                            <img src="https://via.placeholder.com/80" class="img-fluid rounded-start" alt="Article Image">
+                        </div>
+                        <div class="col-9">
+                            <div class="card-body">
+                                <h6 class="card-title">The 25 Healthiest Fruits You Can Eat</h6>
+                                <p class="text-muted small mb-0">Jun 10, 2023</p>
+                                <p class="text-muted small">5 min read</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Repeat for other articles -->
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-3">
+                            <img src="https://via.placeholder.com/80" class="img-fluid rounded-start" alt="Article Image">
+                        </div>
+                        <div class="col-9">
+                            <div class="card-body">
+                                <h6 class="card-title">The Impact of COVID-19 on Healthcare Systems</h6>
+                                <p class="text-muted small mb-0">Jul 10, 2023</p>
+                                <p class="text-muted small">5 min read</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popular Products Section -->
+    <div class="mt-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h4>Popular Products</h4>
+            <a href="#" class="text-primary">See all</a>
+        </div>
+
+        <div class="row mt-3">
+            <!-- Product Card -->
+            <div class="col-4 text-center">
+                <img src="https://via.placeholder.com/80" class="img-fluid mb-2" alt="Product Image">
+                <p>Panadol</p>
+                <p class="text-muted">$15.99</p>
+                <button class="btn btn-primary btn-sm">+</button>
+            </div>
+            <div class="col-4 text-center">
+                <img src="https://via.placeholder.com/80" class="img-fluid mb-2" alt="Product Image">
+                <p>Bodrex Herbal</p>
+                <p class="text-muted">$7.99</p>
+                <button class="btn btn-primary btn-sm">+</button>
+            </div>
+            <div class="col-4 text-center">
+                <img src="https://via.placeholder.com/80" class="img-fluid mb-2" alt="Product Image">
+                <p>Konidin</p>
+                <p class="text-muted">$5.99</p>
+                <button class="btn btn-primary btn-sm">+</button>
+            </div>
+        </div>
+    </div>
 </div>
+
+<!-- Bottom Navigation -->
+<nav class="navbar fixed-bottom navbar-light bg-light">
+    <div class="container d-flex justify-content-around">
+        <a href="#" class="text-dark">
+            <i class="bi bi-house-door-fill"></i>
+            <p>Home</p>
+        </a>
+        <a href="#" class="text-dark">
+            <i class="bi bi-cart-fill"></i>
+            <p>Pharmacy</p>
+        </a>
+        <a href="@Url.Action("Booking", "Doctors")" class="text-dark @(ViewData["ActiveNav"] as string == "Booking" ? "active" : "")">
+            <i class="bi bi-calendar-event-fill"></i>
+            <p>Booking</p>
+        </a>
+        <a href="#" class="text-dark">
+            <i class="bi bi-person-fill"></i>
+            <p>Profile</p>
+        </a>
+    </div>
+</nav>

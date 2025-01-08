@@ -10,11 +10,16 @@ namespace JoHealth.Data
             : base(options)
         {
         }
-        // DbSets for your custom entities
-        public DbSet<Doctor> Doctors { get; set; }
         public DbSet<Patient> Patients { get; set; }
+        public DbSet<Doctor> Doctors { get; set; }
+        public DbSet<Pharmacist> Pharmacists { get; set; }
+        public DbSet<Admin> Admins { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
+        public DbSet<Article> Articles { get; set; }
+        public DbSet<Medicine> Medicines { get; set; }
         public DbSet<Record> Records { get; set; }
+        public DbSet<Payment> Payments { get; set; }
+        public DbSet<User> Users {  get; set; }
 
         /* protected override void OnModelCreating(ModelBuilder modelBuilder)
          {

@@ -1,0 +1,35 @@
+﻿@model IEnumerable<JoHealth.Models.Article>
+
+<div class="container mt-4">
+    <h2 class="text-center">Health Articles</h2>
+
+    <div class="row mt-4">
+        @foreach (var article in Model)
+        {
+            <div class="col-12 mb-3">
+                <div class="card">
+                    <div class="row g-0">
+                        <div class="col-3">
+                            <img src="@article.ImageUrl" class="img-fluid rounded-start" alt="@article.Title">
+                        </div>
+                        <div class="col-9">
+                            <div class="card-body">
+                                <h6 class="card-title">@article.Title</h6>
+                                <p class="text-muted small mb-0">By @article.Author</p>
+                                <p class="text-muted small mb-0">@article.PublishDate.ToString("MMM dd, yyyy")</p>
+                                <p class="text-muted small">
+                                    @(
+                                        article.Body.Length > 100
+                                        ? article.Body.Substring(0, 100) + "..."
+                                        : article.Body
+                                        )
+                                </p>
+                                <a href="@Url.Action("Details", "Articles", new { id = article.Id })" class="btn btn-link">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

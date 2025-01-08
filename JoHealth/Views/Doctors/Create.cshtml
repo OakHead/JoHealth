@@ -1,0 +1,30 @@
+﻿@model JoHealth.Models.Doctor
+
+<div class="container mt-4">
+    <h2>Create New Doctor</h2>
+
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="FirstName" class="control-label"></label>
+            <input asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="LastName" class="control-label"></label>
+            <input asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="Specialty" class="control-label"></label>
+            <input asp-for="Specialty" class="form-control" />
+            <span asp-validation-for="Specialty" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="ImageUrl" class="control-label"></label>
+            <input asp-for="ImageUrl" class="form-control" placeholder="/img/doctor-image.jpg" />
+            <span asp-validation-for="ImageUrl" class="text-danger"></span>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Create</button>
+        <a asp-action="Booking" class="btn btn-secondary mt-3">Cancel</a>
+    </form>
+</div>

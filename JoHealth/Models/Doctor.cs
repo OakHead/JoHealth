@@ -1,12 +1,13 @@
-﻿using JoHealth.Models;
+﻿namespace JoHealth.Models;
 
 public class Doctor : User
 {
+    public string Specialty { get; set; }
+    public string ImageUrl { get; set; }
     public List<Patient> Patients { get; set; } = new List<Patient>();
 
     public void ViewPatientRecords(Patient patient)
     {
-        // Logic to fetch and view patient's records
         var records = patient.MedicalRecords;
     }
 }
