@@ -11,16 +11,6 @@
         public bool IsOnSale { get; set; }
         public decimal SalePrice { get; set; }
 
-        public decimal GetDisplayedPrice()
-        {
-            return IsOnSale ? SalePrice : Price;
-        }
-
-        public void ReduceStock(int quantity)
-        {
-            if (quantity > QuantityAvailable)
-                throw new InvalidOperationException("Not enough stock available.");
-            QuantityAvailable -= quantity;
-        }
+        public decimal DisplayPrice => IsOnSale ? SalePrice : Price;
     }
 }

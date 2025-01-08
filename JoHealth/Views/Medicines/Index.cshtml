@@ -1,0 +1,32 @@
+﻿@model IEnumerable<JoHealth.Models.Medicine>
+
+<div class="container mt-4">
+    <h2>Pharmacy</h2>
+
+    <div class="row">
+        @foreach (var medicine in Model)
+        {
+            <div class="col-md-4">
+                <div class="card">
+                    <img src="@medicine.ImageUrl" class="card-img-top" alt="@medicine.Name">
+                    <div class="card-body">
+                        <h5 class="card-title">@medicine.Name</h5>
+                        <p class="card-text">
+                            @if (medicine.IsOnSale)
+                            {
+                                <span class="text-danger">$@medicine.SalePrice</span>
+                                <del class="text-muted">$@medicine.Price</del>
+                            }
+                            else
+                            {
+                                <span>$@medicine.Price</span>
+                            }
+                        </p>
+                        <p>Available: @medicine.QuantityAvailable</p>
+                        <a href="@Url.Action("Details", "Medicine", new { id = medicine.Id })" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

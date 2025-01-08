@@ -1,0 +1,27 @@
+﻿@model IEnumerable<JoHealth.Models.Medicine>
+
+<div class="container mt-4">
+    <h2>My Cart</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@(item.IsOnSale ? item.SalePrice : item.Price)</td>
+                    <td>
+                        <a href="#" class="btn btn-danger">Remove</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

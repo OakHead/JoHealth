@@ -1,0 +1,43 @@
+﻿@model JoHealth.Models.Medicine
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <img src="@Model.ImageUrl" class="img-fluid" alt="@Model.Name">
+        </div>
+        <div class="col-md-6">
+            <h2>@Model.Name</h2>
+            <p>@Model.Description</p>
+
+            <!-- Price -->
+            <p>
+                @if (Model.IsOnSale)
+                {
+                    <span class="text-danger">$@Model.SalePrice</span>
+                    <del class="text-muted">$@Model.Price</del>
+                }
+                else
+                {
+                    <span>$@Model.Price</span>
+                }
+            </p>
+
+            <!-- Stock -->
+            <p>Available: @Model.QuantityAvailable</p>
+
+            <!-- Add to Cart Button -->
+            <form asp-action="AddToCart" method="post">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <button class="btn btn-primary">Add to Cart</button>
+            </form>
+
+            <!-- Success Message -->
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert alert-success mt-3">
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+        </div>
+    </div>
+</div>

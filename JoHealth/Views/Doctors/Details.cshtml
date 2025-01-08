@@ -1,20 +1,66 @@
 ﻿@model JoHealth.Models.Doctor
 
 <div class="container mt-4">
-    <!-- Back Button -->
-    <div class="mb-3">
-        <a href="@Url.Action("Booking", "Doctors")" class="btn btn-secondary">Back to Doctors</a>
+    <!-- Doctor Details -->
+    <div class="card">
+        <div class="row g-0">
+            <div class="col-md-4">
+                <img src="@Model.ImageUrl" class="img-fluid rounded" alt="@Model.FirstName @Model.LastName">
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h3 class="card-title">@Model.FirstName @Model.LastName</h3>
+                    <p class="text-muted">@Model.Specialty</p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- Doctor Details -->
-    <div class="row">
-        <div class="col-md-4">
-            <img src="@Model.ImageUrl" class="img-fluid rounded" alt="@Model.FirstName @Model.LastName">
+    <!-- Available Slots -->
+    <div class="mt-4">
+        <h4>Available Slots</h4>
+        <div class="d-flex flex-wrap">
+            <button class="btn btn-outline-primary m-2">09:00 AM</button>
+            <button class="btn btn-outline-primary m-2">10:00 AM</button>
+            <button class="btn btn-outline-primary m-2">02:00 PM</button>
+            <button class="btn btn-outline-primary m-2">03:00 PM</button>
+            <button class="btn btn-outline-primary m-2">04:00 PM</button>
         </div>
-        <div class="col-md-8">
-            <h2>@Model.FirstName @Model.LastName</h2>
-            <p class="text-muted">@Model.Specialty</p>
-            <p>More details about the doctor can go here...</p>
+    </div>
+
+    <!-- Book Appointment Button -->
+    <div class="mt-4">
+        <button id="book-appointment" class="btn btn-primary btn-block">Book Appointment</button>
+    </div>
+</div>
+
+<!-- Booking Successful Modal -->
+<div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <div class="mb-3">
+                    <i class="bi bi-check-circle-fill text-success" style="font-size: 3rem;"></i>
+                </div>
+                <h5>Booking Successful</h5>
+                <p>Your payment has been successful, you can have a consultation session with your trusted doctor.</p>
+                <a href="@Url.Action("Index", "Home")" class="btn btn-primary">Back to Home</a>
+            </div>
         </div>
     </div>
 </div>
+
+<script>
+    document.getElementById('book-appointment').addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Show the modal
+        var bookingModal = new bootstrap.Modal(document.getElementById('bookingModal'));
+        bookingModal.show();
+
+        // Redirect to home page after 3 seconds
+        setTimeout(function () {
+            window.location.href = '@Url.Action("Index", "Home")';
+        }, 3000);
+    });
+</script>
