@@ -40,7 +40,8 @@ namespace JoHealth.Controllers
                     FirstName = model.FirstName,
                     LastName = model.LastName,
                     Specialty = model.Specialty,
-                    ImageUrl = model.ImageUrl
+                    ImageUrl = model.ImageUrl,
+                    UserType = "Doctor"
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);

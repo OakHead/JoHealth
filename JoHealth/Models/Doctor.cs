@@ -6,7 +6,9 @@ namespace JoHealth.Models;
 
 public class Doctor : IdentityUser
 {
+    [Required]
     public string FirstName { get; set; }
+    [Required]
     public string LastName { get; set; }
 
     [NotMapped]
@@ -20,6 +22,7 @@ public class Doctor : IdentityUser
     public string ConfirmPassword { get; set; }
     public string Specialty { get; set; }
     public string ImageUrl { get; set; }
+    public string UserType { get; set; }
     public List<Patient> Patients { get; set; } = new List<Patient>();
 
     public void ViewPatientRecords(Patient patient)

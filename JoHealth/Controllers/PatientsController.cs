@@ -17,7 +17,7 @@ namespace JoHealth.Controllers
         [HttpGet]
         public IActionResult Register()
         {
-            return View();
+            return View(new Patient());
         }
 
         [HttpPost]
@@ -33,13 +33,14 @@ namespace JoHealth.Controllers
                     Email = model.Email,
                     FirstName = model.FirstName,
                     LastName = model.LastName,
-                    Role = 1 // Patient role
+                    ImageUrl = model.ImageUrl,
+                    UserType = "Patient"
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("Login", "Account");
+                    return Redirect("/Identity/Account/Login");
                 }
 
                 foreach (var error in result.Errors)
