@@ -1,22 +1,63 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using JoHealth.Data;
 using JoHealth.Models;
-using JoHealth.Data; // Replace with your namespace for ApplicationDbContext
+using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
 
 namespace JoHealth.Controllers
 {
     public class DoctorsController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly ApplicationDbContext _context;
 
-        // Constructor to inject the ApplicationDbContext
-        public DoctorsController(ApplicationDbContext context)
+        public DoctorsController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
+            _userManager = userManager;
             _context = context;
         }
+
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View(new Doctor());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Register(Doctor model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Create the doctor
+                var user = new Doctor
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    Specialty = model.Specialty,
+                    ImageUrl = model.ImageUrl
+                };
+
+                var result = await _userManager.CreateAsync(user, model.Password);
+                if (result.Succeeded)
+                {
+                    return Redirect("/Identity/Account/Login"); // Redirect to login after successful registration
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
+
         public IActionResult Create()
         {
             return View(); // Returns the Create view
@@ -46,6 +87,10 @@ namespace JoHealth.Controllers
         // GET: Doctors/Details/{id}
         public async Task<IActionResult> Details(String id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
 
             if (doctor == null)

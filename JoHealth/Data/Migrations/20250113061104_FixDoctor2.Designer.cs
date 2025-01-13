@@ -4,6 +4,7 @@ using JoHealth.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoHealth.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250113061104_FixDoctor2")]
+    partial class FixDoctor2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -408,41 +411,6 @@ namespace JoHealth.Data.Migrations
                     b.ToTable("Payments");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Doctor", b =>
-                {
-                    b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Specialty")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("FirstName")
-                                .HasColumnName("Doctor_FirstName");
-
-                            t.Property("ImageUrl")
-                                .HasColumnName("Doctor_ImageUrl");
-
-                            t.Property("LastName")
-                                .HasColumnName("Doctor_LastName");
-                        });
-
-                    b.HasDiscriminator().HasValue("Doctor");
-                });
-
             modelBuilder.Entity("JoHealth.Models.User", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
@@ -473,6 +441,27 @@ namespace JoHealth.Data.Migrations
                         });
 
                     b.HasDiscriminator().HasValue("Admin");
+                });
+
+            modelBuilder.Entity("JoHealth.Models.Doctor", b =>
+                {
+                    b.HasBaseType("JoHealth.Models.User");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Specialty")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("ImageUrl")
+                                .HasColumnName("Doctor_ImageUrl");
+                        });
+
+                    b.HasDiscriminator().HasValue("Doctor");
                 });
 
             modelBuilder.Entity("JoHealth.Models.Patient", b =>
