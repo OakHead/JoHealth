@@ -23,7 +23,6 @@ public class Patient : IdentityUser
     public string BloodType { get; set; }
     public string Calories { get; set; }
     public string Weight { get; set; }
-    public string UserType { get; set; } 
 
     public Appointment BookAppointment(Appointment appointment)
     {

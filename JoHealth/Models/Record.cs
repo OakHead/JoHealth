@@ -5,19 +5,14 @@ namespace JoHealth.Models
     public class Record
     {
         public int Id { get; set; }
-        public string PatientId { get; set; }
-        public string DoctorId { get; set; }
+        public int Age { get; set; }
+        public string Gender { get; set; }
         public string Description { get; set; }
-        public string Notes { get; set; }
-        public List<Medicine> RecommendedMedications { get; set; } = new List<Medicine>();
-        public DateTime SubmissionDate { get; set; }
-        public DateTime? UpdatedDate { get; set; }
-        public void UpdateRecord(string doctorId, string notes, List<Medicine> medications)
-        {
-            DoctorId = doctorId;
-            Notes = notes;
-            RecommendedMedications = medications;
-            UpdatedDate = DateTime.Now;
-        }
+        public bool IsRecurring { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public int DoctorId { get; set; }
+
     }
 }

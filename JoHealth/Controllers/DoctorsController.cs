@@ -32,22 +32,20 @@ namespace JoHealth.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Create the doctor
                 var user = new Doctor
                 {
-                    UserName = model.Email,
-                    Email = model.Email,
-                    FirstName = model.FirstName,
-                    LastName = model.LastName,
-                    Specialty = model.Specialty,
-                    ImageUrl = model.ImageUrl,
-                    UserType = "Doctor"
+                    UserName = model.Email, // IdentityUser property
+                    Email = model.Email, // IdentityUser property
+                    FirstName = model.FirstName, // Custom property
+                    LastName = model.LastName, // Custom property
+                    Specialty = model.Specialty, // Custom property
+                    ImageUrl = model.ImageUrl // Custom property
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return Redirect("/Identity/Account/Login"); // Redirect to login after successful registration
+                    return Redirect("/Identity/Account/Login"); // Redirect after successful registration
                 }
 
                 foreach (var error in result.Errors)
@@ -56,7 +54,7 @@ namespace JoHealth.Controllers
                 }
             }
 
-            return View(model);
+            return View(model); // Return the view with validation errors
         }
 
         public IActionResult Create()

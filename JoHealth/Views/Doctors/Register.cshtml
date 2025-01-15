@@ -1,4 +1,7 @@
-﻿@model JoHealth.Models.Doctor
+﻿@using Microsoft.AspNetCore.Identity
+@model JoHealth.Models.Doctor
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
 
 <div class="container mt-4">
     <h2>Register as Doctor</h2>

@@ -15,23 +15,42 @@
             </div>
         </div>
     </div>
-
-    <!-- Available Slots -->
-    <div class="mt-4">
-        <h4>Available Slots</h4>
-        <div class="d-flex flex-wrap">
-            <button class="btn btn-outline-primary m-2">09:00 AM</button>
-            <button class="btn btn-outline-primary m-2">10:00 AM</button>
-            <button class="btn btn-outline-primary m-2">02:00 PM</button>
-            <button class="btn btn-outline-primary m-2">03:00 PM</button>
-            <button class="btn btn-outline-primary m-2">04:00 PM</button>
+    @if (User.Identity.IsAuthenticated && Model != null)
+    {
+        <h2>Submit Your Record</h2>
+        <form asp-controller="Records" asp-action="SubmitRecord" method="post">
+            <div>
+                <input type="hidden" name="DoctorId" value="@Model.Id" />
+                <label>Age:</label>
+                <input type="number" name="Age" placeholder="Enter your age" required />
+            </div>
+            <div>
+                <label>Gender:</label>
+                <select name="Gender" required>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
+                </select>
+            </div>
+            <div>
+                <label>Description:</label>
+                <textarea name="Description" required></textarea>
+            </div>
+            <div>
+                <label>Is it recurring?</label>
+                <input type="checkbox" name="IsRecurring" />
+            </div>
+            <button type="submit">Submit</button>
+        </form>
+        <!-- Book Appointment Button -->
+        <div class="mt-4">
+            <button id="book-appointment" class="btn btn-primary btn-block">Book Appointment</button>
         </div>
-    </div>
-
-    <!-- Book Appointment Button -->
-    <div class="mt-4">
-        <button id="book-appointment" class="btn btn-primary btn-block">Book Appointment</button>
-    </div>
+    }
+    else
+    {
+        <p class="text-warning">Please log in and select a doctor to submit a record.</p>
+    }
 </div>
 
 <!-- Booking Successful Modal -->
