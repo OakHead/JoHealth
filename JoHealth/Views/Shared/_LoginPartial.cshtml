@@ -6,9 +6,9 @@
 <ul class="navbar-nav ms-auto">
     @if (SignInManager.IsSignedIn(User))
     {
-        <li class="nav-item">
-            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
-        </li>
+        <form asp-controller="Doctors" asp-action="Logout" method="post" style="display:inline;">
+            <button type="submit" class="btn btn-link">Logout</button>
+        </form>
     }
     else
     {

@@ -12,11 +12,13 @@ namespace JoHealth.Controllers
     public class DoctorsController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ApplicationDbContext _context;
 
-        public DoctorsController(UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public DoctorsController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext context)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _context = context;
         }
 
@@ -45,7 +47,7 @@ namespace JoHealth.Controllers
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return Redirect("/Identity/Account/Login"); // Redirect after successful registration
+                    return Redirect($"/Identity/Account/RegisterConfirmation?email={user.Email}"); // Redirect after successful registration
                 }
 
                 foreach (var error in result.Errors)
@@ -57,10 +59,19 @@ namespace JoHealth.Controllers
             return View(model); // Return the view with validation errors
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync(); // Logs the user out
+            return RedirectToAction("Index", "Home"); // Redirect to the home page
+        }
+
         public IActionResult Create()
         {
             return View(); // Returns the Create view
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FirstName,LastName,Specialty,ImageUrl")] Doctor doctor)
