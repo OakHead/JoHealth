@@ -14,11 +14,13 @@ namespace JoHealth.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly ApplicationDbContext _context;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public DoctorsController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, ApplicationDbContext context)
+        public DoctorsController(UserManager<IdentityUser> userManager, SignInManager<IdentityUser> signInManager, RoleManager<IdentityRole> roleManager, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _context = context;
         }
 
@@ -44,10 +46,22 @@ namespace JoHealth.Controllers
                     ImageUrl = model.ImageUrl // Custom property
                 };
 
+                // Create the user
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {
-                    return Redirect($"/Identity/Account/RegisterConfirmation?email={user.Email}"); // Redirect after successful registration
+                    // Check if the "Doctor" role exists
+                    var roleExists = await _context.Roles.AnyAsync(r => r.Name == "Patient");
+                    if (!roleExists)
+                    {
+                        await _roleManager.CreateAsync(new IdentityRole("Patient")); // Create the role if it doesn't exist
+                    }
+
+                    // Assign the "Doctor" role to the user
+                    await _userManager.AddToRoleAsync(user, "Patient");
+
+                    // Redirect to confirmation page
+                    return Redirect($"/Identity/Account/RegisterConfirmation?email={user.Email}");
                 }
 
                 foreach (var error in result.Errors)

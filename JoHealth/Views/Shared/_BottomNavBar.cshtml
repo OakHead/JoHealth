@@ -1,4 +1,4 @@
-﻿﻿<div class="bottom-nav fixed-bottom bg-light border-top">
+﻿<div class="bottom-nav fixed-bottom bg-light border-top">
     <div class="d-flex justify-content-around py-2">
         <a href="@Url.Action("Index", "Home")" class="nav-link d-flex flex-column align-items-center mx-3 @((ViewData["ActiveNav"] as string) == "Home" ? "active" : "")">
             <i class="bi bi-house-fill"></i>
@@ -10,7 +10,16 @@
         </a>
         <a href="@Url.Action("Booking", "Doctors")" class="nav-link d-flex flex-column align-items-center mx-3 @((ViewData["ActiveNav"] as string) == "Booking" ? "active" : "")">
             <i class="bi bi-calendar-check-fill"></i>
-            <span class="small mt-1">Booking</span>
+            <span class="small mt-1">
+                @if (User.IsInRole("Doctor"))
+                {
+                    @:Appointments
+                }
+                else
+                {
+                    @:Booking
+                }
+            </span>
         </a>
         <a href="@Url.Action("Index", "Profile")" class="nav-link d-flex flex-column align-items-center mx-3 @((ViewData["ActiveNav"] as string) == "Profile" ? "active" : "")">
             <i class="bi bi-person-fill"></i>

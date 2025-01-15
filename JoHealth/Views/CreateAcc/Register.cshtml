@@ -1,40 +1,82 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@model JoHealth.Models.Patient
 @inject SignInManager<IdentityUser> SignInManager
 @inject UserManager<IdentityUser> UserManager
+@model JoHealth.Models.RegisterViewModel
 
-<h2>Register as Patient</h2>
+@{
+    ViewBag.Title = "Register as " + ViewBag.Role;
+}
+
+<h2>Register as @ViewBag.Role</h2>
 
 <form asp-action="Register" method="post">
+    <input type="hidden" name="role" value="@ViewBag.Role" />
+
+    <!-- Common Fields -->
     <div class="form-group">
         <label asp-for="FirstName"></label>
         <input asp-for="FirstName" class="form-control" />
         <span asp-validation-for="FirstName" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="LastName"></label>
         <input asp-for="LastName" class="form-control" />
         <span asp-validation-for="LastName" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="ImageUrl">Profile Picture URL</label>
         <input asp-for="ImageUrl" class="form-control" />
         <span asp-validation-for="ImageUrl" class="text-danger"></span>
     </div>
+
+    <!-- Account Fields -->
     <div class="form-group">
         <label asp-for="Email"></label>
         <input asp-for="Email" class="form-control" />
         <span asp-validation-for="Email" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="Password"></label>
         <input asp-for="Password" type="password" class="form-control" />
         <span asp-validation-for="Password" class="text-danger"></span>
     </div>
+
     <div class="form-group">
         <label asp-for="ConfirmPassword"></label>
         <input asp-for="ConfirmPassword" type="password" class="form-control" />
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
-    <button type="submit" class="btn btn-primary mt-3">Register</button>
+
+    <!-- Role-Specific Fields -->
+    @if (ViewBag.Role == "Doctor")
+    {
+        <div class="form-group">
+            <label asp-for="Specialty"></label>
+            <input asp-for="Specialty" class="form-control" />
+            <span asp-validation-for="Specialty" class="text-danger"></span>
+        </div>
+    }
+
+    @if (ViewBag.Role == "Pharmacist")
+    {
+        <div class="form-group">
+            <label asp-for="PharmacyName">Pharmacy Name</label>
+            <input asp-for="PharmacyName" class="form-control" />
+            <span asp-validation-for="PharmacyName" class="text-danger"></span>
+        </div>
+    }
+
+    @if (ViewBag.Role == "Admin")
+    {
+        <div class="form-group">
+            <label asp-for="AdminCode">Admin Code</label>
+            <input asp-for="AdminCode" class="form-control" />
+            <span asp-validation-for="AdminCode" class="text-danger"></span>
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Register</button>
 </form>
