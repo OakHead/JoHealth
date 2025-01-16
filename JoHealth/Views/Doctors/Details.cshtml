@@ -15,43 +15,48 @@
             </div>
         </div>
     </div>
-    @if (User.Identity.IsAuthenticated && Model != null)
+
+    <!-- Submit Record Form -->
+    @if (User.Identity.IsAuthenticated)
     {
-        <h2>Submit Your Record</h2>
-        <form asp-controller="Records" asp-action="SubmitRecord" method="post">
-            <div>
-                <input type="hidden" name="DoctorId" value="@Model.Id" />
-                <label>Age:</label>
-                <input type="number" name="Age" placeholder="Enter your age" required />
+        <h3>Submit Your Record</h3>
+        <form asp-action="SubmitRecord" asp-controller="Patients" method="post">
+            <!-- Automatically pass the selected doctor's Id -->
+            <input type="hidden" name="DoctorId" value="@Model.Id" /> <!-- Doctor Id from IdentityUser -->
+
+            <div class="form-group">
+                <label for="Age">Age</label>
+                <input id="Age" name="Age" type="number" class="form-control" required />
             </div>
-            <div>
-                <label>Gender:</label>
-                <select name="Gender" required>
+
+            <div class="form-group">
+                <label for="Gender">Gender</label>
+                <select id="Gender" name="Gender" class="form-control" required>
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
-                    <option value="Other">Other</option>
                 </select>
             </div>
-            <div>
-                <label>Description:</label>
-                <textarea name="Description" required></textarea>
+
+            <div class="form-group">
+                <label for="Description">Description</label>
+                <textarea id="Description" name="Description" class="form-control" required></textarea>
             </div>
-            <div>
-                <label>Is it recurring?</label>
-                <input type="checkbox" name="IsRecurring" />
+
+            <div class="form-group">
+                <label for="IsRecurring">Is it recurring?</label>
+                <input id="IsRecurring" name="IsRecurring" type="checkbox" class="form-check-input" />
             </div>
-            <button type="submit">Submit</button>
+
+            <button type="submit" class="btn btn-primary">Submit</button>
         </form>
-        <!-- Book Appointment Button -->
-        <div class="mt-4">
-            <button id="book-appointment" class="btn btn-primary btn-block">Book Appointment</button>
-        </div>
+
     }
     else
     {
-        <p class="text-warning">Please log in and select a doctor to submit a record.</p>
+        <p class="text-warning">Please log in to submit a record.</p>
     }
 </div>
+
 
 <!-- Booking Successful Modal -->
 <div class="modal fade" id="bookingModal" tabindex="-1" aria-labelledby="bookingModalLabel" aria-hidden="true">

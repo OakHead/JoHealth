@@ -1,25 +1,37 @@
 ﻿@model JoHealth.Models.Record
 
 <h2>Submit a Record</h2>
+
 <form asp-action="SubmitRecord" method="post">
     <div class="form-group">
-        <label for="Age">Age</label>
-        <input type="number" class="form-control" id="Age" name="Age" required />
+        <label asp-for="DoctorId">Select Doctor</label>
+        <select asp-for="DoctorId" class="form-control" asp-items="@(new SelectList(ViewBag.Doctors, "Id", "FullName"))"></select>
+        <span asp-validation-for="DoctorId" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label for="Gender">Gender</label>
-        <select class="form-control" id="Gender" name="Gender" required>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
+        <label asp-for="Age"></label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
     </div>
+
     <div class="form-group">
-        <label for="Description">Description</label>
-        <textarea class="form-control" id="Description" name="Description" required></textarea>
+        <label asp-for="Gender"></label>
+        <input asp-for="Gender" class="form-control" />
+        <span asp-validation-for="Gender" class="text-danger"></span>
     </div>
-    <div class="form-check">
-        <input type="checkbox" class="form-check-input" id="IsRecurring" name="IsRecurring" />
-        <label class="form-check-label" for="IsRecurring">Is it recurring?</label>
+
+    <div class="form-group">
+        <label asp-for="Description"></label>
+        <textarea asp-for="Description" class="form-control"></textarea>
+        <span asp-validation-for="Description" class="text-danger"></span>
     </div>
+
+    <div class="form-group">
+        <label asp-for="IsRecurring">Is it a recurring issue?</label>
+        <input asp-for="IsRecurring" type="checkbox" class="form-check-input" />
+        <span asp-validation-for="IsRecurring" class="text-danger"></span>
+    </div>
+
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

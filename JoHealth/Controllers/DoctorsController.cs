@@ -51,14 +51,14 @@ namespace JoHealth.Controllers
                 if (result.Succeeded)
                 {
                     // Check if the "Doctor" role exists
-                    var roleExists = await _context.Roles.AnyAsync(r => r.Name == "Patient");
+                    var roleExists = await _context.Roles.AnyAsync(r => r.Name == "Doctor");
                     if (!roleExists)
                     {
-                        await _roleManager.CreateAsync(new IdentityRole("Patient")); // Create the role if it doesn't exist
+                        await _roleManager.CreateAsync(new IdentityRole("Doctor")); // Create the role if it doesn't exist
                     }
 
                     // Assign the "Doctor" role to the user
-                    await _userManager.AddToRoleAsync(user, "Patient");
+                    await _userManager.AddToRoleAsync(user, "Doctor");
 
                     // Redirect to confirmation page
                     return Redirect($"/Identity/Account/RegisterConfirmation?email={user.Email}");
@@ -109,20 +109,28 @@ namespace JoHealth.Controllers
         }
 
         // GET: Doctors/Details/{id}
-        public async Task<IActionResult> Details(String id)
+        [HttpGet]
+        public async Task<IActionResult> Details(string id) // Use the IdentityUser's Id
         {
-            if (id == null)
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
+            if (doctor == null)
             {
                 return NotFound();
             }
-            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == id);
 
-            if (doctor == null)
-            {
-                return NotFound(); // Return 404 if the doctor doesn't exist
-            }
+            return View(doctor); // Pass the doctor object to the view
+        }
 
-            return View(doctor); // Return the doctor details view
+
+        [HttpGet]
+        public async Task<IActionResult> Appointments()
+        {
+            var doctorId = _userManager.GetUserId(User); // Get logged-in doctor's ID
+            var records = await _context.Records
+                .Where(r => r.DoctorId.ToString() == doctorId)
+                .ToListAsync();
+
+            return View(records);
         }
     }
 }

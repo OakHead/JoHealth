@@ -21,35 +21,23 @@ namespace JoHealth.Data
         public DbSet<Payment> Payments { get; set; }
         public DbSet<User> Users {  get; set; }
 
-        /* protected override void OnModelCreating(ModelBuilder modelBuilder)
-         {
-             base.OnModelCreating(modelBuilder);
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
 
-             // Configure relationships and table mappings
+            // Define relationship between Record and Patient
+            builder.Entity<Record>()
+                .HasOne(r => r.Patient)
+                .WithMany()
+                .HasForeignKey(r => r.PatientId)
+                .OnDelete(DeleteBehavior.Restrict);
 
-             // Doctor -> Patients relationship
-             modelBuilder.Entity<Doctor>()
-                 .HasMany(d => d.Patients)
-                 .WithMany(p => p.Doctors) // Assuming a many-to-many relationship between Doctors and Patients
-                 .UsingEntity(j => j.ToTable("DoctorPatients")); // Join table
-
-             // Doctor -> Appointments relationship
-             modelBuilder.Entity<Doctor>()
-                 .HasMany(d => d.Appointments)
-                 .WithOne(a => a.Doctor)
-                 .HasForeignKey(a => a.DoctorId);
-
-             // Patient -> Appointments relationship
-             modelBuilder.Entity<Patient>()
-                 .HasMany(p => p.Appointments)
-                 .WithOne(a => a.Patient)
-                 .HasForeignKey(a => a.PatientId);
-
-             // Patient -> MedicalRecords relationship
-             modelBuilder.Entity<Patient>()
-                 .HasMany(p => p.Records)
-                 .WithOne(r => r.Patient)
-                 .HasForeignKey(r => r.PatientId);
-         }*/
+            // Define relationship between Record and Doctor
+            builder.Entity<Record>()
+                .HasOne(r => r.Doctor)
+                .WithMany()
+                .HasForeignKey(r => r.DoctorId)
+                .OnDelete(DeleteBehavior.Restrict);
+        }
     }
 }

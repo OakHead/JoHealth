@@ -31,6 +31,10 @@ using (var scope = app.Services.CreateScope())
     {
         await roleManager.CreateAsync(new IdentityRole("Doctor"));
     }
+    if (!await roleManager.RoleExistsAsync("Patient"))
+    {
+        await roleManager.CreateAsync(new IdentityRole("Patient"));
+    }
 }
 
 if (app.Environment.IsDevelopment())

@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
 namespace JoHealth.Models;
 
@@ -9,9 +9,6 @@ public class Patient : IdentityUser
     public string FirstName { get; set; }
     [Required]
     public string LastName { get; set; }
-    [Required]
-    [EmailAddress]
-    public string Email { get; set; }
     [NotMapped]
     [Required]
     [DataType(DataType.Password)]
@@ -21,26 +18,11 @@ public class Patient : IdentityUser
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; }
     public string ImageUrl { get; set; }
-    public List<Appointment> Appointments { get; set; } = new List<Appointment>();
-    public List<Record> MedicalRecords { get; set; } = new List<Record>();
-    public Payment PaymentMethod { get; set; }
+
+    [Required(ErrorMessage = "Blood Type is required.")]
+    [RegularExpression("^(A|B|AB|O)[+-]$", ErrorMessage = "Invalid Blood Type format.")]
     public string BloodType { get; set; }
-    public string Calories { get; set; }
+
+    [Required(ErrorMessage = "Weight is required.")]
     public string Weight { get; set; }
-
-    public Appointment BookAppointment(Appointment appointment)
-    {
-        Appointments.Add(appointment);
-        return appointment;
-    }
-
-    public void SubmitMedicalRecord(Record record)
-    {
-        MedicalRecords.Add(record);
-    }
-
-    public void UpdatePaymentMethod(Payment payment)
-    {
-        PaymentMethod = payment;
-    }
 }
