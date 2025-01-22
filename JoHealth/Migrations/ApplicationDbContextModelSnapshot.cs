@@ -4,19 +4,16 @@ using JoHealth.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace JoHealth.Data.Migrations
+namespace JoHealth.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250113102807_FixPatient3")]
-    partial class FixPatient3
+    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -24,6 +21,36 @@ namespace JoHealth.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("DoctorNewRecord", b =>
+                {
+                    b.Property<string>("DoctorsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RecordsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DoctorsId", "RecordsId");
+
+                    b.HasIndex("RecordsId");
+
+                    b.ToTable("NewRecordDoctors", (string)null);
+                });
+
+            modelBuilder.Entity("DoctorPatient", b =>
+                {
+                    b.Property<string>("DoctorsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("PatientsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("DoctorsId", "PatientsId");
+
+                    b.HasIndex("PatientsId");
+
+                    b.ToTable("DoctorPatients", (string)null);
+                });
 
             modelBuilder.Entity("JoHealth.Models.Appointment", b =>
                 {
@@ -60,7 +87,7 @@ namespace JoHealth.Data.Migrations
                     b.ToTable("Appointments");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Article", b =>
+            modelBuilder.Entity("JoHealth.Models.NewRecord", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -68,107 +95,50 @@ namespace JoHealth.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Age")
+                        .HasColumnType("int");
 
-                    b.Property<string>("Body")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("PublishDate")
+                    b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Articles");
-                });
-
-            modelBuilder.Entity("JoHealth.Models.Medicine", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsOnSale")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("QuantityAvailable")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("RecordId")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("SalePrice")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RecordId");
-
-                    b.ToTable("Medicines");
-                });
-
-            modelBuilder.Entity("JoHealth.Models.Record", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DoctorId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Notes")
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsAdministeredByPharmacist")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsApprovedByDoctor")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PatientId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PharmacistId")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Prescriptions")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("SubmissionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime?>("UpdatedDate")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PatientId");
-
-                    b.ToTable("Records");
+                    b.ToTable("NewRecords");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -382,6 +352,36 @@ namespace JoHealth.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("NewRecordPatient", b =>
+                {
+                    b.Property<string>("PatientsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RecordsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PatientsId", "RecordsId");
+
+                    b.HasIndex("RecordsId");
+
+                    b.ToTable("NewRecordPatients", (string)null);
+                });
+
+            modelBuilder.Entity("NewRecordPharmacist", b =>
+                {
+                    b.Property<string>("PharmacistsId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("RecordsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("PharmacistsId", "RecordsId");
+
+                    b.HasIndex("RecordsId");
+
+                    b.ToTable("NewRecordPharmacists", (string)null);
+                });
+
             modelBuilder.Entity("Payment", b =>
                 {
                     b.Property<int>("Id")
@@ -427,9 +427,14 @@ namespace JoHealth.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PharmacistId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<string>("Specialty")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.HasIndex("PharmacistId");
 
                     b.ToTable("AspNetUsers", t =>
                         {
@@ -454,13 +459,6 @@ namespace JoHealth.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Calories")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DoctorId")
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -470,13 +468,6 @@ namespace JoHealth.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("PaymentMethodId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -484,23 +475,10 @@ namespace JoHealth.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasIndex("DoctorId");
-
-                    b.HasIndex("PaymentMethodId");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("FirstName")
-                                .HasColumnName("Patient_FirstName");
-
-                            t.Property("LastName")
-                                .HasColumnName("Patient_LastName");
-                        });
-
                     b.HasDiscriminator().HasValue("Patient");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.User", b =>
+            modelBuilder.Entity("Pharmacist", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -508,45 +486,57 @@ namespace JoHealth.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("User");
-                });
-
-            modelBuilder.Entity("Admin", b =>
-                {
-                    b.HasBaseType("JoHealth.Models.User");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.ToTable("AspNetUsers", t =>
                         {
-                            t.Property("ImageUrl")
-                                .HasColumnName("Admin_ImageUrl");
-                        });
+                            t.Property("FirstName")
+                                .HasColumnName("Pharmacist_FirstName");
 
-                    b.HasDiscriminator().HasValue("Admin");
-                });
-
-            modelBuilder.Entity("Pharmacist", b =>
-                {
-                    b.HasBaseType("JoHealth.Models.User");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.ToTable("AspNetUsers", t =>
-                        {
                             t.Property("ImageUrl")
                                 .HasColumnName("Pharmacist_ImageUrl");
+
+                            t.Property("LastName")
+                                .HasColumnName("Pharmacist_LastName");
                         });
 
                     b.HasDiscriminator().HasValue("Pharmacist");
+                });
+
+            modelBuilder.Entity("DoctorNewRecord", b =>
+                {
+                    b.HasOne("JoHealth.Models.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("DoctorsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JoHealth.Models.NewRecord", null)
+                        .WithMany()
+                        .HasForeignKey("RecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("DoctorPatient", b =>
+                {
+                    b.HasOne("JoHealth.Models.Doctor", null)
+                        .WithMany()
+                        .HasForeignKey("DoctorsId")
+                        .OnDelete(DeleteBehavior.ClientCascade)
+                        .IsRequired();
+
+                    b.HasOne("JoHealth.Models.Patient", null)
+                        .WithMany()
+                        .HasForeignKey("PatientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("JoHealth.Models.Appointment", b =>
@@ -558,28 +548,12 @@ namespace JoHealth.Data.Migrations
                         .IsRequired();
 
                     b.HasOne("JoHealth.Models.Patient", "Patient")
-                        .WithMany("Appointments")
+                        .WithMany()
                         .HasForeignKey("PatientId");
 
                     b.Navigation("Doctor");
 
                     b.Navigation("Patient");
-                });
-
-            modelBuilder.Entity("JoHealth.Models.Medicine", b =>
-                {
-                    b.HasOne("JoHealth.Models.Record", null)
-                        .WithMany("RecommendedMedications")
-                        .HasForeignKey("RecordId");
-                });
-
-            modelBuilder.Entity("JoHealth.Models.Record", b =>
-                {
-                    b.HasOne("JoHealth.Models.Patient", null)
-                        .WithMany("MedicalRecords")
-                        .HasForeignKey("PatientId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -633,36 +607,46 @@ namespace JoHealth.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Patient", b =>
+            modelBuilder.Entity("NewRecordPatient", b =>
                 {
-                    b.HasOne("JoHealth.Models.Doctor", null)
-                        .WithMany("Patients")
-                        .HasForeignKey("DoctorId");
-
-                    b.HasOne("Payment", "PaymentMethod")
+                    b.HasOne("JoHealth.Models.Patient", null)
                         .WithMany()
-                        .HasForeignKey("PaymentMethodId")
+                        .HasForeignKey("PatientsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("PaymentMethod");
+                    b.HasOne("JoHealth.Models.NewRecord", null)
+                        .WithMany()
+                        .HasForeignKey("RecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Record", b =>
+            modelBuilder.Entity("NewRecordPharmacist", b =>
                 {
-                    b.Navigation("RecommendedMedications");
+                    b.HasOne("Pharmacist", null)
+                        .WithMany()
+                        .HasForeignKey("PharmacistsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("JoHealth.Models.NewRecord", null)
+                        .WithMany()
+                        .HasForeignKey("RecordsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("JoHealth.Models.Doctor", b =>
                 {
-                    b.Navigation("Patients");
+                    b.HasOne("Pharmacist", null)
+                        .WithMany("Doctors")
+                        .HasForeignKey("PharmacistId");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Patient", b =>
+            modelBuilder.Entity("Pharmacist", b =>
                 {
-                    b.Navigation("Appointments");
-
-                    b.Navigation("MedicalRecords");
+                    b.Navigation("Doctors");
                 });
 #pragma warning restore 612, 618
         }

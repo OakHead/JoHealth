@@ -7,8 +7,10 @@ public class Doctor : IdentityUser
 {
     [Required]
     public string FirstName { get; set; }
+
     [Required]
     public string LastName { get; set; }
+
     [NotMapped]
     [Required]
     [DataType(DataType.Password)]
@@ -18,7 +20,12 @@ public class Doctor : IdentityUser
     [DataType(DataType.Password)]
     [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
     public string ConfirmPassword { get; set; }
+
     public string Specialty { get; set; }
     public string ImageUrl { get; set; }
-    public List<Patient> Patients { get; set; } = new List<Patient>();
+
+    public ICollection<Patient> Patients { get; set; } = new List<Patient>();
+
+    // Many-to-Many Relationship with NewRecord
+    public ICollection<NewRecord> Records { get; set; } = new List<NewRecord>();
 }

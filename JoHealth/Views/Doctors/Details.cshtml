@@ -21,33 +21,31 @@
     {
         <h3>Submit Your Record</h3>
         <form asp-action="SubmitRecord" asp-controller="Patients" method="post">
-            <!-- Automatically pass the selected doctor's Id -->
-            <input type="hidden" name="DoctorId" value="@Model.Id" /> <!-- Doctor Id from IdentityUser -->
-
             <div class="form-group">
-                <label for="Age">Age</label>
-                <input id="Age" name="Age" type="number" class="form-control" required />
+                <label>First Name</label>
+                <input name="FirstName" class="form-control" />
             </div>
-
             <div class="form-group">
-                <label for="Gender">Gender</label>
-                <select id="Gender" name="Gender" class="form-control" required>
+                <label>Last Name</label>
+                <input name="LastName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Age</label>
+                <input name="Age" type="number" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label>Gender</label>
+                <select name="Gender" class="form-control">
                     <option value="Male">Male</option>
                     <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                 </select>
             </div>
-
             <div class="form-group">
-                <label for="Description">Description</label>
-                <textarea id="Description" name="Description" class="form-control" required></textarea>
+                <label>Description</label>
+                <textarea name="Description" class="form-control"></textarea>
             </div>
-
-            <div class="form-group">
-                <label for="IsRecurring">Is it recurring?</label>
-                <input id="IsRecurring" name="IsRecurring" type="checkbox" class="form-check-input" />
-            </div>
-
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary mt-3">Submit</button>
         </form>
 
     }

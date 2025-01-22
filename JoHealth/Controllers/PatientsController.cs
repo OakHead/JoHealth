@@ -91,23 +91,21 @@ namespace JoHealth.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> SubmitRecord(Record model)
+        public async Task<IActionResult> SubmitRecord(NewRecord model)
         {
             if (ModelState.IsValid)
             {
-                model.CreatedAt = DateTime.Now; // Timestamp for record creation
-                model.PatientId = User.FindFirstValue(ClaimTypes.NameIdentifier); // Get logged-in patient's ID
-                model.DoctorId = model.DoctorId; // Passed from the hidden input in the form
+                // Add CreatedAt timestamp
+                model.CreatedAt = DateTime.Now;
 
-                _context.Records.Add(model); // Save the record
+                // Save the record to the database
+              //  _context.NewRecord.Add(model);
                 await _context.SaveChangesAsync();
 
-                // Redirect to the Doctor Details page
-                return RedirectToAction("Details", "Doctors", new { id = model.DoctorId });
+                return RedirectToAction("Index", "Home"); // Redirect to home or a success page
             }
 
-            // If validation fails, reload the same view with errors
-            return View(model);
+            return View(model); // Return the form with validation errors if any
         }
 
     }

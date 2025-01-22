@@ -125,11 +125,10 @@ namespace JoHealth.Controllers
         [HttpGet]
         public async Task<IActionResult> Appointments()
         {
-            var doctorId = _userManager.GetUserId(User); // Get logged-in doctor's ID
-            var records = await _context.Records
-                .Where(r => r.DoctorId.ToString() == doctorId)
-                .ToListAsync();
+            // Fetch all records from the database
+            var records = await _context.NewRecords.ToListAsync();
 
+            // Pass the records to the view
             return View(records);
         }
     }
