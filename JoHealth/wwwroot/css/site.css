@@ -31,5 +31,134 @@ body {
 }
 .bottom-nav {
     height: 60px; /* Example height */
+    justify-content: center;
+}
+.profile-header img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 10px;
+}
+
+.profile-header h3 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.profile-stats p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.menu .btn {
+    text-align: left;
+    font-size: 1rem;
+}
+.card {
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .card img {
+        height: 200px;
+        object-fit: cover;
+    }
+
+.list-group-item {
+    border: none;
+    padding: 15px 10px;
+    transition: background-color 0.2s;
+}
+
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+
+h3 {
+    font-weight: 600;
+}
+
+.text-primary {
+    text-decoration: none;
+}
+
+    .text-primary:hover {
+        text-decoration: underline;
+    }
+/* Container for Rounded Navbar */
+.bottom-nav-container {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    max-width: 400px;
+    height: 70px;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+    z-index: 1000; /* Ensure it stays above other elements */
+    padding: 5px;
+    display: flex;
+    border-radius: 30px;
+    align-items: center;
+    width: 90%; /* Adjust width for responsiveness */
+    justify-content: center !important;
+}
+
+/* Inner Navigation */
+.bottom-nav {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    border-radius: 30px; /* Rounded corners */
+    justify-content: center !important;
+}
+
+/* Navbar Links */
+.nav-link {
+    color: #ffffff; /* White text for contrast */
+    font-size: 16px;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, color 0.3s ease;
+}
+
+    /* Hover and Active State */
+    .nav-link:hover {
+        transform: translateY(-2px); /* Subtle hover effect */
+        color: #ffd700 !important; /* Gold hover effect */
+    }
+
+    .nav-link.active {
+        color: #ffd700 !important; /* Highlight active link */
+    }
+
+    /* Navbar Icons */
+    .nav-link i {
+        font-size: 24px;
+    }
+
+    /* Ensure consistent spacing for small text */
+    .nav-link .small {
+        font-size: 14px;
+        margin-top: 5px;
+    }
+
+/* Responsive Fixes */
+@media (max-width: 576px) {
+    .bottom-nav-container {
+        width: 95%; /* Slightly narrower on smaller screens */
+    }
+
+    .nav-link .small {
+        font-size: 12px; /* Adjust text size for smaller devices */
+    }
 }
 

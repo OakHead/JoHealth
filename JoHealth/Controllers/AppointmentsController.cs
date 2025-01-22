@@ -26,24 +26,6 @@ namespace JoHealth.Controllers
             return View(await applicationDbContext.ToListAsync());
         }
 
-        // GET: Appointments/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var appointment = await _context.Appointments
-                .Include(a => a.Doctor)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (appointment == null)
-            {
-                return NotFound();
-            }
-
-            return View(appointment);
-        }
 
         // GET: Appointments/Create
         public IActionResult Create()
@@ -160,5 +142,40 @@ namespace JoHealth.Controllers
         {
             return _context.Appointments.Any(e => e.Id == id);
         }
+        [HttpGet]
+        public async Task<IActionResult> Details(int id)
+        {
+            var record = await _context.NewRecords.FirstOrDefaultAsync(r => r.Id == id);
+            if (record == null)
+            {
+                return NotFound();
+            }
+
+            return View(record); // Pass the record to the view
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveRecord(int id, string prescriptions)
+        {
+            var record = await _context.NewRecords.FirstOrDefaultAsync(r => r.Id == id);
+            if (record == null)
+            {
+                TempData["ErrorMessage"] = "Record not found.";
+                return RedirectToAction("Index");
+            }
+
+            // Update the prescriptions and mark as approved
+            record.Prescriptions = prescriptions;
+            record.IsApprovedByDoctor = true;
+
+            // Save changes
+            _context.Update(record);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "The record has been approved and moved to the pharmacy.";
+            return RedirectToAction("Index");
+        }
+
     }
 }

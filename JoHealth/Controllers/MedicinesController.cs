@@ -7,154 +7,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using JoHealth.Data;
 using JoHealth.Models;
+using System.Security.Claims;
 
 namespace JoHealth.Controllers
 {
     public class MedicinesController : Controller
     {
-        /* private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public MedicinesController(ApplicationDbContext context)
         {
             _context = context;
         }
-
-
-        // GET: Medicines
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Medicines.ToListAsync());
-        }
-
-        // GET: Medicines/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var medicine = await _context.Medicines
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (medicine == null)
-            {
-                return NotFound();
-            }
-
-            return View(medicine);
-        }
-
-        // GET: Medicines/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Medicines/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Price,QuantityAvailable,ImageUrl,IsOnSale,SalePrice")] Medicine medicine)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(medicine);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(medicine);
-        }
-
-        // GET: Medicines/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var medicine = await _context.Medicines.FindAsync(id);
-            if (medicine == null)
-            {
-                return NotFound();
-            }
-            return View(medicine);
-        }
-
-        // POST: Medicines/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Price,QuantityAvailable,ImageUrl,IsOnSale,SalePrice")] Medicine medicine)
-        {
-            if (id != medicine.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(medicine);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!MedicineExists(medicine.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(medicine);
-        }
-
-        // GET: Medicines/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var medicine = await _context.Medicines
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (medicine == null)
-            {
-                return NotFound();
-            }
-
-            return View(medicine);
-        }
-
-        // POST: Medicines/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var medicine = await _context.Medicines.FindAsync(id);
-            if (medicine != null)
-            {
-                _context.Medicines.Remove(medicine);
-            }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool MedicineExists(int id)
-        {
-            return _context.Medicines.Any(e => e.Id == id);
-        }
-        */
         private static List<Medicine> Medicines = new List<Medicine>
         {
             new Medicine
@@ -191,9 +55,27 @@ namespace JoHealth.Controllers
                 SalePrice = 0M
             }
         };
-        public IActionResult Index()
+        [HttpGet]
+        public async Task<IActionResult> Index()
         {
-            return View(Medicines); // Pass the medicines list to the view
+            // Get the logged-in user's ID
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Check if the user has any submitted records
+            var hasSubmittedRecords = await _context.NewRecords.AnyAsync(r => r.PatientId == userId);
+
+            // Pass the flag and pre-set medicine data to the view
+            ViewData["HasSubmittedRecords"] = hasSubmittedRecords;
+
+            // Mock medicines list or fetch it from a source
+            var medicines = new List<Medicine>
+    {
+        new Medicine { Id = 1, Name = "Paracetamol", Price = 10.00m, SalePrice = 8.00m, IsOnSale = true, QuantityAvailable = 50, ImageUrl = "/images/medicine1.jpg" },
+        new Medicine { Id = 2, Name = "Ibuprofen", Price = 15.00m, SalePrice = 0, IsOnSale = false, QuantityAvailable = 30, ImageUrl = "/images/medicine2.jpg" },
+        // Add more mock data here
+    };
+
+            return View(medicines);
         }
 
         // Medicine Details
@@ -223,5 +105,54 @@ namespace JoHealth.Controllers
             var cartItems = Medicines.Where(m => m.QuantityAvailable < 50).ToList(); // Items added to cart
             return View(cartItems);
         }
+        // List of approved records for pharmacists
+        [HttpGet]
+        public async Task<IActionResult> Pharmacy()
+        {
+            var approvedRecords = await _context.NewRecords
+                .Where(r => r.IsApprovedByDoctor && !r.IsAdministeredByPharmacist)
+                .ToListAsync();
+
+            return View(approvedRecords);
+        }
+
+        // View the record details
+        [HttpGet]
+        public async Task<IActionResult> RecordDetails(int id)
+        {
+            var record = await _context.NewRecords.FirstOrDefaultAsync(r => r.Id == id);
+            if (record == null)
+            {
+                TempData["ErrorMessage"] = "Record not found.";
+                return RedirectToAction("Pharmacy");
+            }
+
+            return View(record);
+        }
+
+        // Approve or Deny a record
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveOrDeny(int id, bool isApproved)
+        {
+            var record = await _context.NewRecords.FirstOrDefaultAsync(r => r.Id == id);
+            if (record == null)
+            {
+                TempData["ErrorMessage"] = "Record not found.";
+                return RedirectToAction("Pharmacy");
+            }
+
+            // Update the record status based on pharmacist's action
+            record.IsAdministeredByPharmacist = isApproved;
+            _context.Update(record);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = isApproved
+                ? "The record has been approved successfully."
+                : "The record has been denied.";
+
+            return RedirectToAction("Pharmacy");
+        }
+
     }
 }

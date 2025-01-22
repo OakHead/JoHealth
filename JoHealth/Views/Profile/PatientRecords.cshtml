@@ -1,0 +1,53 @@
+﻿@model IEnumerable<JoHealth.Models.NewRecord>
+
+<h2>Your Records</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Description</th>
+            <th>Doctor Status</th>
+            <th>Pharmacist Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.Age</td>
+                <td>@record.Gender</td>
+                <td>@record.Description</td>
+                <td>
+                    @if (record.IsApprovedByDoctor)
+                    {
+                        <span class="text-success">Approved</span>
+                    }
+                    else if (record.IsApprovedByDoctor == false)
+                    {
+                        <span class="text-danger">Denied</span>
+                    }
+                    else
+                    {
+                        <span class="text-warning">Pending</span>
+                    }
+                </td>
+                <td>
+                    @if (record.IsAdministeredByPharmacist)
+                    {
+                        <span class="text-success">Approved</span>
+                    }
+                    else if (record.IsApprovedByDoctor && !record.IsAdministeredByPharmacist)
+                    {
+                        <span class="text-warning">Pending</span>
+                    }
+                    else
+                    {
+                        <span class="text-muted">-</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

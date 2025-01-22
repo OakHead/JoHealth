@@ -4,6 +4,7 @@ using JoHealth.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace JoHealth.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250122065010_FixRecordsToAllowNull")]
+    partial class FixRecordsToAllowNull
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -115,9 +118,6 @@ namespace JoHealth.Migrations
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsAdministeredByPharmacist")
-                        .HasColumnType("bit");
 
                     b.Property<bool>("IsApprovedByDoctor")
                         .HasColumnType("bit");
@@ -474,22 +474,10 @@ namespace JoHealth.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.ToTable("AspNetUsers", t =>
-                        {
-                            t.Property("FirstName")
-                                .HasColumnName("Patient_FirstName");
-
-                            t.Property("ImageUrl")
-                                .HasColumnName("Patient_ImageUrl");
-
-                            t.Property("LastName")
-                                .HasColumnName("Patient_LastName");
-                        });
-
                     b.HasDiscriminator().HasValue("Patient");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Pharmacist", b =>
+            modelBuilder.Entity("Pharmacist", b =>
                 {
                     b.HasBaseType("Microsoft.AspNetCore.Identity.IdentityUser");
 
@@ -504,6 +492,18 @@ namespace JoHealth.Migrations
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.ToTable("AspNetUsers", t =>
+                        {
+                            t.Property("FirstName")
+                                .HasColumnName("Pharmacist_FirstName");
+
+                            t.Property("ImageUrl")
+                                .HasColumnName("Pharmacist_ImageUrl");
+
+                            t.Property("LastName")
+                                .HasColumnName("Pharmacist_LastName");
+                        });
 
                     b.HasDiscriminator().HasValue("Pharmacist");
                 });
@@ -623,7 +623,7 @@ namespace JoHealth.Migrations
 
             modelBuilder.Entity("NewRecordPharmacist", b =>
                 {
-                    b.HasOne("JoHealth.Models.Pharmacist", null)
+                    b.HasOne("Pharmacist", null)
                         .WithMany()
                         .HasForeignKey("PharmacistsId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -638,12 +638,12 @@ namespace JoHealth.Migrations
 
             modelBuilder.Entity("JoHealth.Models.Doctor", b =>
                 {
-                    b.HasOne("JoHealth.Models.Pharmacist", null)
+                    b.HasOne("Pharmacist", null)
                         .WithMany("Doctors")
                         .HasForeignKey("PharmacistId");
                 });
 
-            modelBuilder.Entity("JoHealth.Models.Pharmacist", b =>
+            modelBuilder.Entity("Pharmacist", b =>
                 {
                     b.Navigation("Doctors");
                 });

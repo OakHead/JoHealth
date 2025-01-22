@@ -6,6 +6,7 @@ using JoHealth.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 
 namespace JoHealth.Controllers
 {
@@ -125,11 +126,50 @@ namespace JoHealth.Controllers
         [HttpGet]
         public async Task<IActionResult> Appointments()
         {
-            // Fetch all records from the database
-            var records = await _context.NewRecords.ToListAsync();
+            // Get the logged-in doctor's ID
+            var doctorId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
-            // Pass the records to the view
-            return View(records);
+            // Fetch only the records assigned to this doctor
+            var records = await _context.NewRecords
+                .Where(r => r.DoctorId == doctorId)
+                .ToListAsync();
+
+            return View(records); // Pass filtered records to the view
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ApproveRecord(int recordId)
+        {
+            var record = await _context.NewRecords.FirstOrDefaultAsync(r => r.Id == recordId);
+            if (record != null)
+            {
+                record.IsApprovedByDoctor = true;
+                _context.Update(record);
+                await _context.SaveChangesAsync();
+            }
+
+            return RedirectToAction("Appointments");
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> UpdateRecord(int recordId, string prescriptions)
+        {
+            var record = await _context.NewRecords.FirstOrDefaultAsync(r => r.Id == recordId);
+            if (record == null)
+            {
+                TempData["ErrorMessage"] = "The record does not exist.";
+                return RedirectToAction("Appointments");
+            }
+
+            // Update prescriptions
+            record.Prescriptions = prescriptions;
+            _context.Update(record);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Prescriptions have been updated.";
+            return RedirectToAction("Appointments");
+        }
+
+
     }
 }

@@ -28,16 +28,17 @@
         <textarea class="form-control" rows="3" readonly>@Model.Description</textarea>
     </div>
 
-    <form asp-action="ApproveRecord" method="post">
+    <div class="form-group">
+        <label>Prescriptions</label>
+        <textarea class="form-control" rows="3" readonly>@Model.Prescriptions</textarea>
+    </div>
+
+    <form asp-action="ApproveOrDeny" method="post">
         @Html.AntiForgeryToken()
         <input type="hidden" name="id" value="@Model.Id" />
 
-        <div class="form-group">
-            <label>Prescriptions</label>
-            <textarea class="form-control" name="prescriptions" rows="3" required>@Model.Prescriptions</textarea>
-        </div>
-
-        <button type="submit" class="btn btn-primary">Approve</button>
+        <button type="submit" name="isApproved" value="true" class="btn btn-success">Approve</button>
+        <button type="submit" name="isApproved" value="false" class="btn btn-danger">Deny</button>
     </form>
 
     @if (TempData["SuccessMessage"] != null)

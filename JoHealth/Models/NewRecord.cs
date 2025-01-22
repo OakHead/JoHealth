@@ -30,11 +30,10 @@ namespace JoHealth.Models
 
         public string? PharmacistId { get; set; }
 
-        [Required]
-        public string Prescriptions { get; set; } // New property for prescriptions
+        public string? Prescriptions { get; set; } // New property for prescriptions
 
         public bool IsApprovedByDoctor { get; set; } // New flag for approval
-        // public bool IsAdministeredByPharmacist { get; set; } // New flag for pharmacist administration
+        public bool IsAdministeredByPharmacist { get; set; } // New flag for pharmacist administration
 
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow; // not imp
 

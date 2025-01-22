@@ -95,17 +95,28 @@ namespace JoHealth.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Add CreatedAt timestamp
-                model.CreatedAt = DateTime.Now;
+                // Validate the doctor exists
+                var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == model.DoctorId);
+                if (doctor == null)
+                {
+                    TempData["ErrorMessage"] = "The selected doctor does not exist.";
+                    return RedirectToAction("Details", "Doctors", new { id = model.DoctorId });
+                }
 
-                // Save the record to the database
-              //  _context.NewRecord.Add(model);
+                // Get the logged-in patient's ID
+                var patientId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                model.PatientId = patientId;
+
+                // Save the record
+                _context.NewRecords.Add(model);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Index", "Home"); // Redirect to home or a success page
+                TempData["SuccessMessage"] = "Your record has been successfully submitted!";
+                return RedirectToAction("Details", "Doctors", new { id = model.DoctorId });
             }
 
-            return View(model); // Return the form with validation errors if any
+            TempData["ErrorMessage"] = "There was a problem submitting your record. Please try again.";
+            return RedirectToAction("Details", "Doctors", new { id = model.DoctorId });
         }
 
     }

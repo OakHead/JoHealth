@@ -1,41 +1,33 @@
-﻿@model JoHealth.Models.Patient
+﻿@model dynamic
+@using System.Security.Claims
 
-<div class="container text-center mt-4">
-    <!-- Profile Picture and Name -->
-    <img src="@Model.ImageUrl" class="rounded-circle" alt="Profile Picture" style="width: 100px; height: 100px;">
-    <h3 class="mt-3">@Model.FirstName @Model.LastName</h3>
-
-    <!-- Stats Section -->
-    <div class="d-flex justify-content-around mt-4">
-        <div>
-            <i class="bi bi-heart-fill text-primary" style="font-size: 24px;"></i>
-            <p class="mb-0">Blood Type</p>
-            <strong>@Model.BloodType</strong>
-        </div>
-        <div>
-            <i class="bi bi-scale text-primary" style="font-size: 24px;"></i>
-            <p class="mb-0">Weight</p>
-            <strong>@Model.Weight</strong>
-        </div>
+<div class="container mt-4 text-center">
+    <div class="profile-header">
+        <img src="@Model.ImageUrl" class="rounded-circle" alt="Profile Picture" style="width: 100px; height: 100px;">
+        <h3>@Model.FirstName @Model.LastName</h3>
     </div>
 
-    <!-- Options Section -->
-    <div class="mt-4">
-        <a href="@Url.Action("Reports", "Profile")" class="btn btn-outline-primary btn-block d-flex align-items-center justify-content-between">
-            <span><i class="bi bi-file-earmark-text"></i> Reports</span>
-            <i class="bi bi-chevron-right"></i>
+    @if ((string)ViewData["Role"] == "Patient")
+    {
+        <div class="profile-stats mt-3">
+            <p><strong>Blood Type:</strong> @Model.BloodType</p>
+            <p><strong>Weight:</strong> @Model.Weight lbs</p>
+        </div>
+    }
+    else if ((string)ViewData["Role"] == "Doctor")
+    {
+        <div class="profile-stats mt-3">
+            <p><strong>Specialization:</strong> @Model.Specialty</p>
+        </div>
+    }
+
+    <div class="menu mt-4">
+        <a href="@Url.Action(ViewData["Role"] == "Patient" ? "PatientRecords" : ViewData["Role"] == "Doctor" ? "DoctorRecords" : "PharmacistRecords", "Profile")"
+           class="btn btn-outline-primary mb-2 w-100">
+            Reports
         </a>
-        <a href="@Url.Action("Appointments", "Profile")" class="btn btn-outline-primary btn-block d-flex align-items-center justify-content-between mt-2">
-            <span><i class="bi bi-calendar-check"></i> Appointment</span>
-            <i class="bi bi-chevron-right"></i>
-        </a>
-        <a href="@Url.Action("PaymentMethod", "Profile")" class="btn btn-outline-primary btn-block d-flex align-items-center justify-content-between mt-2">
-            <span><i class="bi bi-credit-card"></i> Payment Method</span>
-            <i class="bi bi-chevron-right"></i>
-        </a>
-        <a href="@Url.Action("Logout", "Account")" class="btn btn-outline-danger btn-block d-flex align-items-center justify-content-between mt-2">
-            <span><i class="bi bi-box-arrow-right"></i> Logout</span>
-            <i class="bi bi-chevron-right"></i>
+        <a href="@Url.Action("PatientProfile", "Profile")" class="btn btn-outline-secondary mb-2 w-100">
+            Edit Profile
         </a>
     </div>
 </div>

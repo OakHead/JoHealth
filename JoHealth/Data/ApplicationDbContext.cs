@@ -16,7 +16,7 @@ namespace JoHealth.Data
         public DbSet<Pharmacist> Pharmacists { get; set; }
         public DbSet<Appointment> Appointments { get; set; }
         public DbSet<NewRecord> NewRecords { get; set; }
-
+        public DbSet<Payment> Payments { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

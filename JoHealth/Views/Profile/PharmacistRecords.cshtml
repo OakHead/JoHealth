@@ -1,0 +1,31 @@
+﻿@model IEnumerable<JoHealth.Models.NewRecord>
+
+<h2>Pending Records</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Patient Name</th>
+            <th>Age</th>
+            <th>Gender</th>
+            <th>Description</th>
+            <th>Prescriptions</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var record in Model)
+        {
+            <tr>
+                <td>@record.FirstName @record.LastName</td>
+                <td>@record.Age</td>
+                <td>@record.Gender</td>
+                <td>@record.Description</td>
+                <td>@record.Prescriptions</td>
+                <td>
+                    <a href="@Url.Action("RecordDetails", "Medicines", new { id = record.Id })" class="btn btn-primary">View Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

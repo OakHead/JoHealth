@@ -1,32 +1,54 @@
-using JoHealth.Models;
+using JoHealth.Data;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
+using Microsoft.EntityFrameworkCore;
+using System.Linq;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
-namespace JoHealth.Controllers
+public class HomeController : Controller
 {
-    public class HomeController : Controller
+    private readonly ApplicationDbContext _context;
+
+    public HomeController(ApplicationDbContext context)
     {
-        private readonly ILogger<HomeController> _logger;
+        _context = context;
+    }
 
-        public HomeController(ILogger<HomeController> logger)
+    [HttpGet]
+    public async Task<IActionResult> Index()
+    {
+        // Get logged-in user ID
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+        string firstName = "User"; // Default value
+        string imageUrl = "~/img/placeholder-profile.png"; // Default image
+
+        // Check if the user is a Patient, Doctor, or Pharmacist
+        if (await _context.Patients.AnyAsync(p => p.Id == userId))
         {
-            _logger = logger;
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == userId);
+            firstName = patient?.FirstName ?? firstName;
+            imageUrl = patient?.ImageUrl ?? imageUrl;
+        }
+        else if (await _context.Doctors.AnyAsync(d => d.Id == userId))
+        {
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == userId);
+            firstName = doctor?.FirstName ?? firstName;
+            imageUrl = doctor?.ImageUrl ?? imageUrl;
+        }
+        else if (await _context.Pharmacists.AnyAsync(ph => ph.Id == userId))
+        {
+            var pharmacist = await _context.Pharmacists.FirstOrDefaultAsync(ph => ph.Id == userId);
+            firstName = pharmacist?.FirstName ?? firstName;
+            imageUrl = pharmacist?.ImageUrl ?? imageUrl;
         }
 
-        public IActionResult Index()
-        {
-            return View();
-        }
+        // Fetch the top 3 doctors and articles
+        var doctors = await _context.Doctors.OrderBy(d => d.Id).Take(3).ToListAsync();       
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        // Pass data to the view
+        ViewBag.FirstName = firstName;
+        ViewBag.ImageUrl = imageUrl;
+        return View(doctors);
     }
 }

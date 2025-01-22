@@ -8,30 +8,30 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th>First Name</th>
-                    <th>Last Name</th>
+                    <th>Patient Name</th>
                     <th>Age</th>
                     <th>Gender</th>
                     <th>Description</th>
-                    <th>Is Recurring</th>
-                    <th>Created At</th>
+                    <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach (var record in Model)
                 {
                     <tr>
-                        <td>@record.FirstName</td>
-                        <td>@record.LastName</td>
+                        <td>@record.FirstName @record.LastName</td>
                         <td>@record.Age</td>
                         <td>@record.Gender</td>
                         <td>@record.Description</td>
-                        <td>@record.CreatedAt.ToString("g")</td>
+                        <td>
+                            <a href="@Url.Action("Details", "Appointments", new { id = record.Id })" class="btn btn-success">View</a>
+                        </td>
                     </tr>
                 }
             </tbody>
         </table>
     }
+
     else
     {
         <p>No appointments found.</p>
