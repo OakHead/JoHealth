@@ -7,6 +7,40 @@ html {
     font-size: 16px;
   }
 }
+/* Header Styles */
+.navbar {
+    background-color: #003366 !important; /* Dark Blue Background */
+    color: #FFFFFF !important; /* White text for contrast */
+    padding: 10px 20px;
+    border-bottom: 2px solid #D9B3FF; /* Optional lavender border */
+}
+
+    .navbar a.nav-link {
+        color: #FFFFFF !important; /* White links */
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .navbar a.nav-link:hover {
+            color: #D9B3FF !important; /* Gold hover effect for links */
+        }
+
+.navbar-brand img {
+    max-height: 40px; /* Logo size */
+    margin-right: 10px;
+}
+
+.navbar-toggler {
+    border-color: #FFFFFF !important; /* White border for toggler button */
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba%28155,155,155,1%29' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E") !important; /* Light-colored toggler icon */
+}
+
+.collapse.show {
+    background-color: #003366; /* Ensure dropdown matches navbar */
+}
 
 .btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
   box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
@@ -20,6 +54,10 @@ html {
 body {
     margin-bottom: 60px;
     padding-bottom: 60px;
+    background-color: whitesmoke !important;
+}
+.text-warning {
+    color: #D9B3FF !important;
 }
 .card-img-top {
     height: 200px;
@@ -28,10 +66,6 @@ body {
 
 .card-text {
     font-size: 0.9em;
-}
-.bottom-nav {
-    height: 60px; /* Example height */
-    justify-content: center;
 }
 .profile-header img {
     width: 100px;
@@ -101,10 +135,11 @@ h3 {
     z-index: 1000; /* Ensure it stays above other elements */
     padding: 5px;
     display: flex;
-    border-radius: 30px;
+    border-radius: 30px !important;
     align-items: center;
     width: 90%; /* Adjust width for responsiveness */
     justify-content: center !important;
+    background-color: darkblue !important;
 }
 
 /* Inner Navigation */
@@ -114,10 +149,11 @@ h3 {
     align-items: center;
     width: 100%;
     height: 100%;
-    border-radius: 30px; /* Rounded corners */
+    border-radius: 30px !important; /* Rounded corners */
     justify-content: center !important;
+    color: white !important;
+    /*height: 60px;*/ /* Example height */
 }
-
 /* Navbar Links */
 .nav-link {
     color: #ffffff; /* White text for contrast */
@@ -133,11 +169,11 @@ h3 {
     /* Hover and Active State */
     .nav-link:hover {
         transform: translateY(-2px); /* Subtle hover effect */
-        color: #ffd700 !important; /* Gold hover effect */
+        color: #D9B3FF !important; /* Gold hover effect */
     }
 
     .nav-link.active {
-        color: #ffd700 !important; /* Highlight active link */
+        color: #D9B3FF !important; /* Highlight active link */
     }
 
     /* Navbar Icons */
