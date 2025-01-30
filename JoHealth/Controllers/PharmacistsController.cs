@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using JoHealth.Models;
 using Microsoft.EntityFrameworkCore;
 using JoHealth.Data;
+using System.Security.Claims;
 
 public class PharmacistsController : Controller
 {
@@ -68,4 +69,18 @@ public class PharmacistsController : Controller
         await _signInManager.SignOutAsync(); // Logs the user out
         return RedirectToAction("Index", "Home"); // Redirect to the home page
     }
+    [HttpGet]
+    public async Task<IActionResult> EditProfile()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        var user = await _userManager.FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            return NotFound();
+        }
+
+        return View(user); // Pass the user entity directly to the view
+    }
+
 }

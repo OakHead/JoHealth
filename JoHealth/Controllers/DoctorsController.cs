@@ -146,10 +146,17 @@ namespace JoHealth.Controllers
                 record.IsApprovedByDoctor = true;
                 _context.Update(record);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Record approved successfully!";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Record not found!";
             }
 
-            return RedirectToAction("Appointments");
+            // Redirect back to Appointments view
+            return RedirectToAction("Details", "Appointments", new { id = recordId });
         }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> UpdateRecord(int recordId, string prescriptions)
@@ -158,7 +165,7 @@ namespace JoHealth.Controllers
             if (record == null)
             {
                 TempData["ErrorMessage"] = "The record does not exist.";
-                return RedirectToAction("Appointments");
+                return RedirectToAction("Details", "Appointments");
             }
 
             // Update prescriptions
@@ -167,9 +174,65 @@ namespace JoHealth.Controllers
             await _context.SaveChangesAsync();
 
             TempData["SuccessMessage"] = "Prescriptions have been updated.";
-            return RedirectToAction("Appointments");
+            return RedirectToAction("Details", "Appointments", new { id = recordId });
+        }
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == userId);
+
+            if (doctor == null)
+            {
+                return NotFound();
+            }
+
+            return View(doctor); // Pass patient entity directly to the view
         }
 
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(Doctor model, IFormFile ImageFile)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+            // Fetch the user from the database
+            var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == userId);
+            if (doctor == null)
+            {
+                TempData["ErrorMessage"] = "Failed to save changes.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            try
+            {
+                // Update fields
+                doctor.FirstName = model.FirstName;
+                doctor.LastName = model.LastName;
+
+                // Handle image upload
+                if (ImageFile != null)
+                {
+                    var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", ImageFile.FileName);
+                    using (var stream = new FileStream(imagePath, FileMode.Create))
+                    {
+                        await ImageFile.CopyToAsync(stream);
+                    }
+                    doctor.ImageUrl = $"/img/{ImageFile.FileName}";
+                }
+
+                // Save changes to the database
+                _context.Update(doctor);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Profile updated successfully!";
+                return RedirectToAction("Index", "Profile");
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "Failed to save changes.";
+                return RedirectToAction("Index", "Home");
+            }
+        }
     }
 }

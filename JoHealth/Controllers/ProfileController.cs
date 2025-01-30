@@ -111,5 +111,31 @@ public class ProfileController : Controller
 
         return View("Error");
     }
+    [HttpGet]
+    public async Task<IActionResult> EditProfile()
+    {
+        var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
 
+        // Try to retrieve the user from each table based on their role
+        var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == userId);
+        if (patient != null)
+        {
+            return View(patient); // Return the patient profile
+        }
+
+        var doctor = await _context.Doctors.FirstOrDefaultAsync(d => d.Id == userId);
+        if (doctor != null)
+        {
+            return View(doctor); // Return the doctor profile
+        }
+
+        var pharmacist = await _context.Pharmacists.FirstOrDefaultAsync(ph => ph.Id == userId);
+        if (pharmacist != null)
+        {
+            return View(pharmacist); // Return the pharmacist profile
+        }
+
+        // If no matching user is found
+        return NotFound();
+    }
 }

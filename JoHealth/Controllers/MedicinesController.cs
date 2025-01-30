@@ -28,18 +28,18 @@ namespace JoHealth.Controllers
                 Description = "Pain relief medicine.",
                 Price = 15.99M,
                 QuantityAvailable = 50,
-                ImageUrl = "/img/panadol.jpg",
+                ImageUrl = "/img/Panadol.jpg",
                 IsOnSale = false,
                 SalePrice = 0M
             },
             new Medicine
             {
                 Id = 2,
-                Name = "Bodrex Herbal",
-                Description = "Herbal supplement for cold and flu.",
+                Name = "Ibuprofen",
+                Description = "Painkiller for adults",
                 Price = 7.99M,
                 QuantityAvailable = 30,
-                ImageUrl = "/img/bodrex.jpg",
+                ImageUrl = "/img/Ibuprofen.jpg",
                 IsOnSale = true,
                 SalePrice = 5.99M
             },
@@ -70,8 +70,8 @@ namespace JoHealth.Controllers
             // Mock medicines list or fetch it from a source
             var medicines = new List<Medicine>
     {
-        new Medicine { Id = 1, Name = "Paracetamol", Price = 10.00m, SalePrice = 8.00m, IsOnSale = true, QuantityAvailable = 50, ImageUrl = "/images/medicine1.jpg" },
-        new Medicine { Id = 2, Name = "Ibuprofen", Price = 15.00m, SalePrice = 0, IsOnSale = false, QuantityAvailable = 30, ImageUrl = "/images/medicine2.jpg" },
+        new Medicine { Id = 1, Name = "Paracetamol", Price = 10.00m, SalePrice = 8.00m, IsOnSale = true, QuantityAvailable = 50, ImageUrl = "/img/Panadol.jpg" },
+        new Medicine { Id = 2, Name = "Ibuprofen", Price = 15.00m, SalePrice = 0, IsOnSale = false, QuantityAvailable = 30, ImageUrl = "/img/Ibuprofen.jpg" },
         // Add more mock data here
     };
 

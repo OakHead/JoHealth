@@ -118,6 +118,53 @@ namespace JoHealth.Controllers
             TempData["ErrorMessage"] = "There was a problem submitting your record. Please try again.";
             return RedirectToAction("Details", "Doctors", new { id = model.DoctorId });
         }
+        [HttpGet]
+        public async Task<IActionResult> EditProfile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == userId);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            return View(patient); // Pass patient entity directly to the view
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditProfile(Patient model, IFormFile ImageFile)
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            var patient = await _context.Patients.FirstOrDefaultAsync(p => p.Id == userId);
+
+            if (patient == null)
+            {
+                return NotFound();
+            }
+
+            // Update fields
+            patient.FirstName = model.FirstName;
+            patient.LastName = model.LastName;
+
+            // Handle image upload
+            if (ImageFile != null)
+            {
+                var imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img", ImageFile.FileName);
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await ImageFile.CopyToAsync(stream);
+                }
+                patient.ImageUrl = $"/img/{ImageFile.FileName}";
+            }
+
+            _context.Update(patient);
+            await _context.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Profile updated successfully!";
+            return RedirectToAction("Index", "Profile");
+        }
 
     }
 }
