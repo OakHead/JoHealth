@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JoHealth.Controllers
 {
@@ -122,7 +123,7 @@ namespace JoHealth.Controllers
             return View(doctor); // Pass the doctor object to the view
         }
 
-
+        [Authorize(Roles = "Doctor")]
         [HttpGet]
         public async Task<IActionResult> Appointments()
         {

@@ -1,5 +1,6 @@
 ﻿@model JoHealth.Models.NewRecord
-
+@if (User.IsInRole("Pharmacist"))
+{
 <div class="container mt-4">
     <h2>Record Details</h2>
 
@@ -54,4 +55,12 @@
             @TempData["ErrorMessage"]
         </div>
     }
-</div>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <h4>Access Denied</h4>
+        <p>You do not have permission to view this page.</p>
+    </div>
+}

@@ -1,4 +1,6 @@
 ﻿@model IEnumerable<JoHealth.Models.NewRecord>
+@if (User.IsInRole("Doctor"))
+{
 
 <div class="container mt-4">
     <h2>Appointments</h2>
@@ -37,3 +39,11 @@
         <p>No appointments found.</p>
     }
 </div>
+}
+else
+{
+    <div class="alert alert-danger">
+        <h4>Access Denied</h4>
+        <p>You do not have permission to view this page.</p>
+    </div>
+}

@@ -23,6 +23,7 @@ builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
+
 // Seed roles on startup
 using (var scope = app.Services.CreateScope())
 {

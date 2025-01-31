@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using JoHealth.Data;
 using JoHealth.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace JoHealth.Controllers
 {
@@ -117,6 +118,7 @@ namespace JoHealth.Controllers
         }
 
         // View the record details
+        [Authorize(Roles = "Pharmacist")]
         [HttpGet]
         public async Task<IActionResult> RecordDetails(int id)
         {
